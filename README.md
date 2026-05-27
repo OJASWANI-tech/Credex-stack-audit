@@ -25,8 +25,7 @@ Users can input their AI tooling stack, plans, team size, and monthly spend to g
 
 The audit engine analyzes subscriptions, identifies oversized plans or unnecessary seat allocations, and estimates monthly + annual savings.
 
-
-
+![image alt](https://github.com/OJASWANI-tech/Credex-stack-audit/blob/main/Screenshot%202026-05-27%20213718.png?raw=true)
 ---
 
 ## Tactical Recommendations
