@@ -32,7 +32,7 @@ The audit engine analyzes subscriptions, identifies oversized plans or unnecessa
 
 Each tool receives a finance-style recommendation with reasoning and projected savings opportunities.
 
-
+![image alt](https://github.com/OJASWANI-tech/Credex-stack-audit/blob/main/Screenshot%202026-05-27%20214016.png?raw=true)
 ---
 
 # Features
