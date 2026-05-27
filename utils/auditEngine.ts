@@ -10,11 +10,72 @@ const PRICING: Record<string, { Pro?: number; Team?: number; Enterprise?: number
 
 function clamp(n: number) { return Math.max(0, Number(n || 0)) }
 
+const TIER_RANK: Record<string, number> = {
+  Free: 0,
+  Pro: 1,
+  Team: 2,
+  Enterprise: 3,
+}
+
 function perSeatBaseline(tool: string, tier: string): number | null {
   const p = PRICING[tool]
   if (!p) return null
   // @ts-ignore
   return p[tier as keyof typeof p] ?? null
+}
+
+function getRecommendedPricingForTeamSize(toolName: string, planTier: string, seats: number, teamSize: number, currentMonthlySpend: number) {
+  const effectiveSeats = Math.min(seats, teamSize)
+  const currentRate = perSeatBaseline(toolName, planTier)
+  let bestSpend = currentMonthlySpend
+  let bestTier = planTier
+  let bestRate = currentRate
+
+  const tierCandidates: Array<keyof typeof TIER_RANK> = ['Pro', 'Team', 'Enterprise']
+  for (const candidateTier of tierCandidates) {
+    if (TIER_RANK[candidateTier] > TIER_RANK[planTier]) continue
+    const rate = perSeatBaseline(toolName, candidateTier)
+    if (rate === null) continue
+    const candidateSpend = effectiveSeats * rate
+    if (candidateSpend < bestSpend) {
+      bestSpend = candidateSpend
+      bestTier = candidateTier
+      bestRate = rate
+    }
+  }
+
+  if (effectiveSeats < seats && currentRate !== null) {
+    const reducedSeatSpend = effectiveSeats * currentRate
+    if (reducedSeatSpend < bestSpend) {
+      bestSpend = reducedSeatSpend
+      bestTier = planTier
+      bestRate = currentRate
+    }
+  }
+
+  let action = ''
+  let reason = ''
+  if (bestSpend < currentMonthlySpend) {
+    if (effectiveSeats < seats && bestTier !== planTier) {
+      action = `Reduce seats to ${effectiveSeats} and downgrade ${toolName} from ${planTier} to ${bestTier}.`
+      reason = `Actual team size is ${teamSize}; ${toolName} should not keep ${seats} seats on ${planTier}.`
+    } else if (effectiveSeats < seats) {
+      action = `Reduce seats to ${effectiveSeats} to match team size.`
+      reason = `Current headcount is ${teamSize}, so seat count can be reduced from ${seats}.`
+    } else if (bestTier !== planTier) {
+      action = `Downgrade ${toolName} from ${planTier} to ${bestTier}.`
+      reason = `Team size and usage indicate a lower tier is sufficient for this tool.`
+    }
+  }
+
+  return {
+    recommendedMonthlySpend: bestSpend,
+    recommendedTier: bestTier,
+    recommendedRate: bestRate,
+    recommendedSeats: effectiveSeats,
+    action,
+    reason,
+  }
 }
 
 export function calculateAudit(inputs: FormInput[], teamSize: number, useCase: string): AuditReport {
@@ -35,16 +96,25 @@ export function calculateAudit(inputs: FormInput[], teamSize: number, useCase: s
     let savingsMonthly = 0
     let reason = ''
 
+    const teamSizeOptimization = getRecommendedPricingForTeamSize(toolName, planTier, seats, teamSize, currentMonthlySpend)
+    if (teamSizeOptimization.recommendedMonthlySpend < recommendedMonthlySpend) {
+      recommendedMonthlySpend = teamSizeOptimization.recommendedMonthlySpend
+      savingsMonthly = currentMonthlySpend - recommendedMonthlySpend
+      recommendedAction = teamSizeOptimization.action || `Optimize ${toolName} pricing based on team size`;
+      reason = teamSizeOptimization.reason || `Recommend pricing based on actual team size and tier.`
+    }
+
     // Rule 1: Claude Team optimization
     if (toolName.toLowerCase().includes('claude') && planTier === 'Team' && seats > 0 && seats < 5) {
-      // team is currently paying Team price; recommend downgrading to Pro per seat
-      const teamRate = perSeatBaseline('Claude', 'Team') || (currentMonthlySpend / Math.max(seats, 1))
       const proRate = perSeatBaseline('Claude', 'Pro') || 20
       const recommended = seats * proRate
-      recommendedMonthlySpend = Math.min(currentMonthlySpend, recommended)
-      savingsMonthly = currentMonthlySpend - recommendedMonthlySpend
-      recommendedAction = `Downgrade Claude from Team to Pro at $${proRate}/seat`;
-      reason = `Small team (${seats} seats) — Pro tier is cheaper per-seat than Team.`
+      const claudeSavings = currentMonthlySpend - recommended
+      if (claudeSavings > savingsMonthly) {
+        recommendedMonthlySpend = recommended
+        savingsMonthly = claudeSavings
+        recommendedAction = `Downgrade Claude from Team to Pro at $${proRate}/seat`;
+        reason = `Small team (${seats} seats) — Pro tier is cheaper per-seat than Team.`
+      }
     }
 
     // Rule 2: API Volume Optimization
