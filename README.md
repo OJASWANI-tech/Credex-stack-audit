@@ -18,7 +18,7 @@ Built as a modern SaaS-style financial optimization dashboard with rule-based au
 
 Users can input their AI tooling stack, plans, team size, and monthly spend to generate a tactical optimization report.
 
-
+![image alt](https://raw.githubusercontent.com/OJASWANI-tech/Credex-stack-audit/cb1bad736c3957467e19cd71d1fab17ce51e9bac/Screenshot%202026-05-27%20201819.png)
 ---
 
 ## Spend Optimization Results
