@@ -25,6 +25,13 @@ export default function Page() {
   const [teamSize, setTeamSize] = useState<number>(5)
   const [useCase, setUseCase] = useState<string>('coding')
   const [rows, setRows] = useState<FormInput[]>(() => [emptyRow()])
+  const [joinEmail, setJoinEmail] = useState<string>('')
+
+  function handleJoinListSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setJoinEmail('')
+    alert('Thank you for joining our list! We will notify you of deeper analyses.')
+  }
 
   // Load persisted state
   useEffect(() => {
@@ -144,9 +151,15 @@ export default function Page() {
           <div className="card p-6">
             <h3 className="font-semibold">Your stack is optimized</h3>
             <p className="muted mt-2">Identified savings are small. Join our notifications list for deeper analyses and future wholesale offers.</p>
-            <form className="mt-4 flex gap-3">
-              <input placeholder="Your email" className="px-3 py-2 border border-slate-300 rounded flex-1 bg-white" />
-              <button className="px-4 py-2 bg-slate-900 text-white rounded">Join List</button>
+            <form className="mt-4 flex gap-3" onSubmit={handleJoinListSubmit}>
+              <input
+                placeholder="Your email"
+                value={joinEmail}
+                onChange={e => setJoinEmail(e.target.value)}
+                className="px-3 py-2 border border-slate-300 rounded flex-1 bg-white"
+                type="email"
+              />
+              <button type="submit" className="px-4 py-2 bg-slate-900 text-white rounded">Join List</button>
             </form>
           </div>
         ) : (
