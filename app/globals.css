@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --bg: #0b0d0f;
-  --panel: #0f1113;
-  --muted: #9aa0a6;
-  --accent: #ffffff;
-  --glass: rgba(255,255,255,0.03);
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --muted: #6b7280;
+  --accent: #111827;
+  --glass: rgba(15,23,42,0.04);
 }
 
 html,body,#root {
@@ -23,10 +23,11 @@ body {
 }
 
 .card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border: 1px solid rgba(255,255,255,0.04);
-  border-radius: 12px;
+  background: var(--panel);
+  border: 1px solid rgba(148,163,184,0.18);
+  border-radius: 16px;
   padding: 1rem;
+  box-shadow: 0 24px 50px rgba(15,23,42,0.06);
 }
 
 .muted { color: var(--muted); }

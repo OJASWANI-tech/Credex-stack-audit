@@ -67,9 +67,9 @@ export default function Page() {
           <div className="mt-4 space-y-4">
             <div className="flex gap-4 items-center">
               <label className="muted w-28">Team Size</label>
-              <input type="number" value={teamSize} onChange={e => setTeamSize(Math.max(1, parseInt(e.target.value || '1')))} className="bg-transparent border border-white/5 px-3 py-2 rounded w-28" />
+              <input type="number" value={teamSize} onChange={e => setTeamSize(Math.max(1, parseInt(e.target.value || '1')))} className="bg-white border border-slate-300 px-3 py-2 rounded w-28" />
               <label className="muted ml-4">Use Case</label>
-              <select value={useCase} onChange={e => setUseCase(e.target.value)} className="bg-transparent border border-white/5 px-3 py-2 rounded">
+              <select value={useCase} onChange={e => setUseCase(e.target.value)} className="bg-white border border-slate-300 px-3 py-2 rounded">
                 <option value="coding">Coding</option>
                 <option value="ml">Machine Learning</option>
                 <option value="analytics">Analytics</option>
@@ -79,24 +79,24 @@ export default function Page() {
             <div className="space-y-3">
               {rows.map(row => (
                 <div key={row.id} className="flex gap-3 items-center">
-                  <select value={row.toolName} onChange={e => updateRow(row.id, { toolName: e.target.value })} className="bg-transparent border border-white/5 px-3 py-2 rounded w-40">
+                  <select value={row.toolName} onChange={e => updateRow(row.id, { toolName: e.target.value })} className="bg-white border border-slate-300 px-3 py-2 rounded w-40">
                     {TOOL_OPTIONS.map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
-                  <select value={row.planTier} onChange={e => updateRow(row.id, { planTier: e.target.value as any })} className="bg-transparent border border-white/5 px-3 py-2 rounded w-32">
+                  <select value={row.planTier} onChange={e => updateRow(row.id, { planTier: e.target.value as any })} className="bg-white border border-slate-300 px-3 py-2 rounded w-32">
                     <option>Pro</option>
                     <option>Team</option>
                     <option>Enterprise</option>
                     <option>Free</option>
                   </select>
-                  <input type="number" value={row.seats} onChange={e => updateRow(row.id, { seats: Math.max(0, parseInt(e.target.value || '0')) })} className="bg-transparent border border-white/5 px-3 py-2 rounded w-24" />
-                  <input type="number" value={row.monthlySpend} onChange={e => updateRow(row.id, { monthlySpend: Math.max(0, parseFloat(e.target.value || '0')) })} step="0.01" className="bg-transparent border border-white/5 px-3 py-2 rounded w-40" placeholder="Monthly spend" />
+                  <input type="number" value={row.seats} onChange={e => updateRow(row.id, { seats: Math.max(0, parseInt(e.target.value || '0')) })} className="bg-white border border-slate-300 px-3 py-2 rounded w-24" />
+                  <input type="number" value={row.monthlySpend} onChange={e => updateRow(row.id, { monthlySpend: Math.max(0, parseFloat(e.target.value || '0')) })} step="0.01" className="bg-white border border-slate-300 px-3 py-2 rounded w-40" placeholder="Monthly spend" />
                   <button onClick={() => removeRow(row.id)} className="text-sm muted">Remove</button>
                 </div>
               ))}
             </div>
 
             <div>
-              <button onClick={addRow} className="px-4 py-2 bg-white/6 rounded">Add Tool</button>
+              <button onClick={addRow} className="px-4 py-2 bg-slate-900 text-white rounded">Add Tool</button>
             </div>
           </div>
         </div>
@@ -136,8 +136,8 @@ export default function Page() {
             <h3 className="text-xl font-semibold">Secure a Custom Credex Wholesale Consultation</h3>
             <p className="muted mt-2">You qualify for a tailored wholesale credits analysis — our team will map your API volume and propose contractual credits to capture the identified savings.</p>
             <form className="mt-4 flex gap-3">
-              <input placeholder="Your work email" className="px-3 py-2 border rounded flex-1" />
-              <button className="px-4 py-2 bg-black text-white rounded">Request Consultation</button>
+              <input placeholder="Your work email" className="px-3 py-2 border border-slate-300 rounded flex-1 bg-white" />
+              <button className="px-4 py-2 bg-slate-900 text-white rounded">Request Consultation</button>
             </form>
           </div>
         ) : report.savingsMonthly < 100 ? (
@@ -145,8 +145,8 @@ export default function Page() {
             <h3 className="font-semibold">Your stack is optimized</h3>
             <p className="muted mt-2">Identified savings are small. Join our notifications list for deeper analyses and future wholesale offers.</p>
             <form className="mt-4 flex gap-3">
-              <input placeholder="Your email" className="px-3 py-2 border rounded flex-1 bg-transparent" />
-              <button className="px-4 py-2 bg-white/6 rounded">Join List</button>
+              <input placeholder="Your email" className="px-3 py-2 border border-slate-300 rounded flex-1 bg-white" />
+              <button className="px-4 py-2 bg-slate-900 text-white rounded">Join List</button>
             </form>
           </div>
         ) : (
