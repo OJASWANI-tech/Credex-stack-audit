@@ -8,7 +8,7 @@ Built as a modern SaaS-style financial optimization dashboard with rule-based au
 
 ## Live Demo
 
-🌐 Live Site: https://credex-stack-audit.netlify.app/
+🌐 Live Site: https://credex-stack-audit-puhq.vercel.app/
 
 ---
 
